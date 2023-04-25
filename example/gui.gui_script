@@ -1,0 +1,52 @@
+function init(self)
+	pprint(yoga)
+	
+	local width, height = window.get_size()
+	
+	local screen = gui.new_box_node(vmath.vector3(), vmath.vector3())
+	gui.set_color(screen, vmath.vector3(0, 0, 0, 1))
+	yoga.new_node(screen)
+	yoga.set_width_height(screen, width, height)
+	yoga.set_align_items(screen, 4) -- STRETCH
+
+	--red
+	local header = gui.new_box_node(vmath.vector3(), vmath.vector3())
+	gui.set_color(header, vmath.vector3(1, 0, 0, 0.3))
+	yoga.new_node(header)
+	yoga.set_height(header, 100)
+
+	--green
+	local body = gui.new_box_node(vmath.vector3(), vmath.vector3())
+	gui.set_color(body, vmath.vector3(0, 1, 0, 0.3))
+	yoga.new_node(body)
+	yoga.set_grow(body, 1)
+
+	--blue 
+	local footer = gui.new_box_node(vmath.vector3(), vmath.vector3())
+	gui.set_color(footer, vmath.vector3(0, 0, 1, 0.3))
+	yoga.new_node(footer)
+	yoga.set_min_height(footer, 50)
+	yoga.set_margin(footer, yoga.EDGE_VERTICAL, 5)
+
+	yoga.set_gui_parent(footer, screen)
+	yoga.set_gui_parent(body, screen)
+	yoga.set_gui_parent(header, screen)
+	
+	yoga.calculate_layout(screen)
+	yoga.update(screen)
+end
+
+function final(self)
+end
+
+function update(self, dt)
+end
+
+function on_message(self, message_id, message, sender)
+end
+
+function on_input(self, action_id, action)
+end
+
+function on_reload(self)
+end

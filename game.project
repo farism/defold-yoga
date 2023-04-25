@@ -1,0 +1,16 @@
+[bootstrap]
+main_collection = /example/example.collectionc
+
+[script]
+shared_state = 1
+
+[display]
+width = 480
+height = 320
+
+[project]
+title = Yoga
+
+[library]
+include_dirs = yoga
+

@@ -1,0 +1,568 @@
+- name: yoga
+  type: table
+  desc: Yoga layout engine
+  members:
+  - name: update
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_gui_parent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: parent
+      type: node
+
+  - name: delete_gui_node
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_width_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: width
+      type: number
+    - name: height
+      type: number
+
+  - name: new_node
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: free_node
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: reset_node
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: calculate_layout
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_overflow
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_overflow
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: overflow
+      type: number
+
+  - name: get_direction
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_direction
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: direction
+      type: number
+
+  - name: get_flex_direction
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_flex_direction
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: flex_direction
+      type: number
+
+  - name: get_align_items
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_align_items
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: align_items
+      type: number
+
+  - name: get_align_content
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_align_content
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: align_content
+      type: number
+
+  - name: get_justify_content
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_justify_content
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: justify_content
+      type: number
+
+  - name: get_grow
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_grow
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: grow
+      type: number
+
+  - name: get_shrink
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_shrink
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: shrink
+      type: number
+
+  - name: get_basis
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_basis
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: basis
+      type: number
+
+  - name: set_basis_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: basis_percent
+      type: number
+
+  - name: get_flex_position
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_flex_position
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: flex_position
+      type: number
+
+  - name: get_position
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_position
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: position
+      type: number
+
+  - name: set_position_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: edge
+      type: number
+    - name: position_percent
+      type: number
+
+  - name: get_width
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_width
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: width
+      type: number
+
+  - name: get_min_width
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_min_width
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: min_width
+      type: number
+
+  - name: get_max_width
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_max_width
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: max_width
+      type: number
+
+  - name: set_width_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: width_percent
+      type: number
+
+  - name: set_min_width_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: min_width_percent
+      type: number
+
+  - name: set_max_width_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: max_width_percent
+      type: number
+
+  - name: get_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: height
+      type: number
+
+  - name: set_height_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: height_percent
+      type: number
+
+  - name: get_min_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_min_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: min_height
+      type: number
+
+  - name: set_min_height_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: min_height_percent
+      type: number
+
+  - name: get_max_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_max_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: max_height
+      type: number
+
+  - name: set_max_height_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: max_height_percent
+      type: number
+
+  - name: get_aspect_ratio
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_aspect_ratio
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: aspect_ratio
+      type: number
+
+  - name: get_border
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_border
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: edge
+      type: number
+    - name: border
+      type: number
+
+  - name: get_margin
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_margin
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: edge
+      type: number
+    - name: margin
+      type: number
+
+  - name: set_margin_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: edge
+      type: number
+    - name: margin_percent
+      type: number
+
+  - name: get_padding
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_padding
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: edge
+      type: number
+    - name: padding
+      type: number
+
+  - name: set_padding_percent
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+    - name: edge
+      type: number
+    - name: padding_percent
+      type: number
+
+  - name: get_layout
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_left
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_top
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_right
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_bottom
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_width
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_height
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_border
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: get_layout_margin
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+        get_layout_padding
