@@ -98,5 +98,7 @@ declare namespace yoga {
   export function get_layout_margin(node: node): number
   export function get_layout_padding(node: node): number
 
-  export function set_capcity(capacity: number): any
+  export function set_invert_y(inverted: boolean): any
+  
+  export function set_capacity(capacity: number): any
 }

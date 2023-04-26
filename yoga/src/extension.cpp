@@ -25,20 +25,6 @@ static YGFlexDirection GetInvertedFlexDirection(YGFlexDirection direction)
     return direction;
 }
 
-static YGEdge GetInvertedEdge(YGEdge edge)
-{
-    if (g_InvertY && edge == YGEdgeTop)
-    {
-        return YGEdgeBottom;
-    }
-    else if (g_InvertY && edge == YGEdgeBottom)
-    {
-        return YGEdgeTop;
-    }
-
-    return edge;
-}
-
 static int SetInvertY(lua_State *L)
 {
     g_InvertY = lua_toboolean(L, 2);
@@ -58,7 +44,21 @@ static int SetCapacity(lua_State *L)
     return 0;
 }
 
-static YGEdge CheckEdge(lua_State *L)
+static YGEdge GetInvertedEdge(YGEdge edge)
+{
+    if (g_InvertY && edge == YGEdgeTop)
+    {
+        return YGEdgeBottom;
+    }
+    else if (g_InvertY && edge == YGEdgeBottom)
+    {
+        return YGEdgeTop;
+    }
+
+    return edge;
+}
+
+static YGEdge GetEdge(lua_State *L)
 {
     YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
 
@@ -69,7 +69,13 @@ static YGNodeRef CheckYGNode(lua_State *L)
 {
     dmGui::HNode node = dmGui::LuaCheckNode(L, 1);
     YGNodeRef *item = g_YGNodes.Get(node);
-    assert(*item != NULL);
+    
+    if (item == NULL || *item == NULL)
+    {
+        luaL_error(L, "Could not find YGNodeRef. Was it manually freed?");
+        return NULL;
+    }
+
     return *item;
 }
 
@@ -181,7 +187,7 @@ static int SetPositionType(lua_State *L)
 static int GetPosition(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     YGValue value = YGNodeStyleGetPosition(node, edge);
     lua_pushnumber(L, value.value);
 
@@ -191,7 +197,7 @@ static int GetPosition(lua_State *L)
 static int SetPosition(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPosition(node, edge, value);
 
@@ -201,7 +207,7 @@ static int SetPosition(lua_State *L)
 static int SetPositionPercent(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPositionPercent(node, edge, value);
 
@@ -540,7 +546,7 @@ static int SetWidthHeight(lua_State *L)
 static int GetBorder(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     lua_pushnumber(L, YGNodeStyleGetBorder(node, edge));
 
     return 1;
@@ -549,7 +555,7 @@ static int GetBorder(lua_State *L)
 static int SetBorder(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetBorder(node, edge, value);
 
@@ -559,7 +565,7 @@ static int SetBorder(lua_State *L)
 static int GetPadding(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     YGValue padding = YGNodeStyleGetPadding(node, edge);
     lua_pushnumber(L, padding.value);
 
@@ -569,7 +575,7 @@ static int GetPadding(lua_State *L)
 static int SetPadding(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPadding(node, edge, value);
 
@@ -579,7 +585,7 @@ static int SetPadding(lua_State *L)
 static int SetPaddingPercent(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPaddingPercent(node, edge, value);
 
@@ -589,7 +595,7 @@ static int SetPaddingPercent(lua_State *L)
 static int GetMargin(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     YGValue margin = YGNodeStyleGetMargin(node, edge);
     lua_pushnumber(L, margin.value);
 
@@ -599,10 +605,8 @@ static int GetMargin(lua_State *L)
 static int SetMargin(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
-    // YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = GetEdge(L);
     float value = luaL_checknumber(L, 3);
-    printf("setting margin: %d", edge);
     YGNodeStyleSetMargin(node, edge, value);
 
     return 0;
@@ -611,7 +615,7 @@ static int SetMargin(lua_State *L)
 static int SetMarginPercent(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetMarginPercent(node, edge, value);
 
@@ -698,7 +702,7 @@ static int GetLayoutHeight(lua_State *L)
 static int GetLayoutBorder(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     lua_pushnumber(L, YGNodeLayoutGetBorder(node, edge));
 
     return 1;
@@ -707,7 +711,7 @@ static int GetLayoutBorder(lua_State *L)
 static int GetLayoutMargin(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     lua_pushnumber(L, YGNodeLayoutGetMargin(node, edge));
 
     return 1;
@@ -716,7 +720,7 @@ static int GetLayoutMargin(lua_State *L)
 static int GetLayoutPadding(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = CheckEdge(L);
+    YGEdge edge = GetEdge(L);
     lua_pushnumber(L, YGNodeLayoutGetPadding(node, edge));
 
     return 1;
@@ -725,6 +729,11 @@ static int GetLayoutPadding(lua_State *L)
 static int GetLayout(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
+
+    if (node == NULL)
+    {
+        return 0;
+    }
 
     lua_newtable(L);
 
@@ -838,6 +847,14 @@ static int SetParent(lua_State *L)
     }
 
     return 0;
+}
+
+static int GetChildCount(lua_State *L)
+{
+    YGNodeRef node = CheckYGNode(L);
+    lua_pushnumber(L, (lua_Number)YGNodeGetChildCount(node));
+
+    return 1;
 }
 
 // YGNodeRef YGNodeNewWithConfig(YGConfigRef config);
@@ -1055,6 +1072,7 @@ static const luaL_reg Module_methods[] =
         {"delete_node", DeleteNode},
         {"reset_node", ResetNode},
         {"set_parent", SetParent},
+        {"get_child_count", GetChildCount},
 
         {"get_overflow", GetOverflow},
         {"set_overflow", SetOverflow},

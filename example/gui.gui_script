@@ -26,17 +26,11 @@ function init(self)
 	yoga.set_min_height(footer, 50)
 	yoga.set_margin(footer, yoga.EDGE_TOP, 5)
 
-	yoga.set_parent(header, screen)
 	yoga.set_parent(body, screen)
+	yoga.set_parent(header, body)
 	yoga.set_parent(footer, screen)
 	yoga.calculate_layout(screen)
 	yoga.update_node(screen)
-
-	timer.delay(1, false, function()
-		-- yoga.delete_node(header)
-		-- yoga.calculate_layout(screen)
-		-- yoga.update_node(screen)
-	end)
 end
 
 function final(self)

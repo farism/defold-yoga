@@ -190,7 +190,9 @@ All functions take a gui `node` as their first argument. This is used as the loo
 
 `yoga.get_layout_padding(node: node): number`
 
-`yoga.set_capcity(capacity: number): void`
+`yoga.set_invert_y(inverted: boolean): void`
+
+`yoga.set_capacity(capacity: number): void`
 
 # LICENSE
 
