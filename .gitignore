@@ -11,3 +11,5 @@ builtins
 manifest.private.der
 manifest.public.der
 .vscode
+debug.keystore
+debug.keystore.pass.txt
