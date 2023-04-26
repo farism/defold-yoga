@@ -20,10 +20,22 @@ platforms:
     x86_64-linux:
         context:
             flags: ["-std=c++14"]
+    
+    x86_64-ios:
+        context:
+            flags: ["-std=c++14"]
+
+    arm64-android:
+        context:
+            flags: ["-std=c++14"]
 
     arm64-ios:
         context:
             flags: ["-std=c++14"]
+    
+    armv7-android:
+        context:
+            flags: ["-std=c++14"]        
 
     armv7-ios:
         context:

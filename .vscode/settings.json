@@ -1,7 +1,0 @@
-{
-  "files.associations": {
-    "*.ejs": "html",
-    "nginx.conf.template": "nginx",
-    "__node_handle": "cpp"
-  }
-}

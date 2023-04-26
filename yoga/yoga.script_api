@@ -9,7 +9,7 @@
     - name: node
       type: node
 
-  - name: set_gui_parent
+  - name: set_parent
     type: function
     desc: 
     parameters:
@@ -18,7 +18,7 @@
     - name: parent
       type: node
 
-  - name: delete_gui_node
+  - name: delete_node
     type: function
     desc: 
     parameters:
@@ -37,6 +37,13 @@
       type: number
 
   - name: new_node
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: delete_node
     type: function
     desc: 
     parameters:
@@ -565,4 +572,65 @@
     - name: node
       type: node
 
-        get_layout_padding
+  - name: get_layout_padding
+    type: function
+    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: set_invert_y
+    type: function
+    desc: Sets whether the coordinate system should be inverted on the Y axis.
+    parameters:
+    - name: invert
+      type: boolean
+
+  - name: set_capacity
+    type: function
+    desc: Sets the underlying capacity of the yoga node cache
+    parameters:
+    - name: capacity
+      type: number
+
+  - name: ALIGN_AUTO
+  - name: ALIGN_START
+  - name: ALIGN_CENTER
+  - name: ALIGN_END
+  - name: ALIGN_STRETCH
+  - name: ALIGN_BASELINE
+  - name: ALIGN_SPACE_BETWEEN
+  - name: ALIGN_SPACE_AROUND
+  - name: DISPLAY_FLEX
+  - name: DISPLAY_NONE
+  - name: DIRECTION_INHERIT
+  - name: DIRECTION_LTR
+  - name: DIRECTION_RTL
+  - name: EDGE_LEFT
+  - name: EDGE_TOP
+  - name: EDGE_RIGHT
+  - name: EDGE_BOTTOM
+  - name: EDGE_START
+  - name: EDGE_END
+  - name: EDGE_HORIZONTAL
+  - name: EDGE_VERTICAL
+  - name: EDGE_ALL
+  - name: FLEX_DIRECTION_COLUMN
+  - name: FLEX_DIRECTION_COLUMN_REVERSE
+  - name: FLEX_DIRECTION_ROW
+  - name: FLEX_DIRECTION_ROW_REVERSE
+  - name: JUSTIFY_START
+  - name: JUSTIFY_CENTER
+  - name: JUSTIFY_END
+  - name: JUSTIFY_SPACE_BETWEEN
+  - name: JUSTIFY_SPACE_AROUND
+  - name: JUSTIFY_SPACE_EVENLY
+  - name: OVERFLOW_VISIBLE
+  - name: OVERFLOW_HIDDEN
+  - name: OVERFLOW_SCROLL
+  - name: POSITION_TYPE_STATIC
+  - name: POSITION_TYPE_RELATIVE
+  - name: POSITION_TYPE_ABSOLUTE
+  - name: WRAP_NOWRAP
+  - name: WRAP_WRAP
+  - name: WRAP_WRAP_REVERSE

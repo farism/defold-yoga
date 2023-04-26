@@ -1,113 +1,68 @@
-// YGNodeRef YGNodeNewWithConfig(YGConfigRef config);
-// YGNodeRef YGNodeClone(YGNodeRef node);
-// void YGNodeFreeRecursiveWithCleanupFunc(YGNodeRef node, YGNodeCleanupFunc cleanup);
-// void YGNodeFreeRecursive(YGNodeRef node);
-// void YGNodeInsertChild(YGNodeRef node, YGNodeRef child, uint32_t index);
-// void YGNodeSwapChild(YGNodeRef node, YGNodeRef child, uint32_t index);
-// void YGNodeRemoveChild(YGNodeRef node, YGNodeRef child);
-// void YGNodeRemoveAllChildren(YGNodeRef node);
-// YGNodeRef YGNodeGetChild(YGNodeRef node, uint32_t index);
-// YGNodeRef YGNodeGetOwner(YGNodeRef node);
-// YGNodeRef YGNodeGetParent(YGNodeRef node);
-// uint32_t YGNodeGetChildCount(YGNodeRef node);
-// void YGNodeSetChildren(YGNodeRef owner, const YGNodeRef children[], uint32_t count);
-// void YGNodeSetChildren(YGNodeRef owner, const std::vector<YGNodeRef> &children);
-// void YGNodeSetIsReferenceBaseline(YGNodeRef node, bool isReferenceBaseline);
-// bool YGNodeIsReferenceBaseline(YGNodeRef node);
-// void YGNodeMarkDirty(YGNodeRef node);
-// void YGNodeMarkDirtyAndPropagateToDescendants(YGNodeRef node);
-// void YGNodePrint(YGNodeRef node, YGPrintOptions options);
-// bool YGFloatIsUndefined(float value);
-// bool YGNodeCanUseCachedMeasurement(
-//     YGMeasureMode widthMode,
-//     float width,
-//     YGMeasureMode heightMode,
-//     float height,
-//     YGMeasureMode lastWidthMode,
-//     float lastWidth,
-//     YGMeasureMode lastHeightMode,
-//     float lastHeight,
-//     float lastComputedWidth,
-//     float lastComputedHeight,
-//     float marginRow,
-//     float marginColumn,
-//     YGConfigRef config);
-// void YGNodeCopyStyle(YGNodeRef dstNode, YGNodeRef srcNode);
-// void *YGNodeGetContext(YGNodeRef node);
-// void YGNodeSetContext(YGNodeRef node, void *context);
-// void YGConfigSetPrintTreeFlag(YGConfigRef config, bool enabled);
-// bool YGNodeHasMeasureFunc(YGNodeRef node);
-// void YGNodeSetMeasureFunc(YGNodeRef node, YGMeasureFunc measureFunc);
-// bool YGNodeHasBaselineFunc(YGNodeRef node);
-// void YGNodeSetBaselineFunc(YGNodeRef node, YGBaselineFunc baselineFunc);
-// YGDirtiedFunc YGNodeGetDirtiedFunc(YGNodeRef node);
-// void YGNodeSetDirtiedFunc(YGNodeRef node, YGDirtiedFunc dirtiedFunc);
-// void YGNodeSetPrintFunc(YGNodeRef node, YGPrintFunc printFunc);
-// bool YGNodeGetHasNewLayout(YGNodeRef node);
-// void YGNodeSetHasNewLayout(YGNodeRef node, bool hasNewLayout);
-// YGNodeType YGNodeGetNodeType(YGNodeRef node);
-// void YGNodeSetNodeType(YGNodeRef node, YGNodeType nodeType);
-// bool YGNodeIsDirty(YGNodeRef node);
-// void YGNodeStyleSetFlexBasisAuto(YGNodeRef node);
-// void YGNodeStyleSetPosition(YGNodeRef node, YGEdge edge, float position);
-// void YGNodeStyleSetPositionPercent(YGNodeRef node, YGEdge edge, float position);
-// YGValue YGNodeStyleGetPosition(YGNodeConstRef node, YGEdge edge);
-// void YGNodeStyleSetMarginAuto(YGNodeRef node, YGEdge edge);
-// void YGNodeStyleSetGap(YGNodeRef node, YGGutter gutter, float gapLength);
-// float YGNodeStyleGetGap(YGNodeConstRef node, YGGutter gutter);
-// void YGNodeStyleSetWidthAuto(YGNodeRef node);
-// void YGNodeStyleSetHeightAuto(YGNodeRef node);
-// YGDirection YGNodeLayoutGetDirection(YGNodeRef node);
-// bool YGNodeLayoutGetHadOverflow(YGNodeRef node);
-// void YGAssert(bool condition, const char *message);
-// void YGAssertWithNode(YGNodeRef node, bool condition, const char *message);
-// void YGAssertWithConfig(YGConfigRef config, bool condition, const char *message);
-// YGConfigRef YGConfigNew(void);
-// YGConfigRef YGConfigGetDefault(void);
-// int32_t YGConfigGetInstanceCount(void);
-// void YGConfigSetLogger(YGConfigRef config, YGLogger logger);
-// void YGConfigSetPointScaleFactor(YGConfigRef config, float pixelsInPoint);
-// bool YGConfigGetUseLegacyStretchBehaviour(YGConfigRef config);
-// void YGConfigSetUseLegacyStretchBehaviour(YGConfigRef config, bool useLegacyStretchBehaviour);
-// void YGConfigFree(YGConfigRef config);
-// void YGConfigCopy(YGConfigRef dest, YGConfigRef src);
-// void YGConfigSetExperimentalFeatureEnabled(YGConfigRef config, YGExperimentalFeature feature, bool enabled);
-// bool YGConfigIsExperimentalFeatureEnabled(YGConfigRef config, YGExperimentalFeature feature);
-// void YGConfigSetUseWebDefaults(YGConfigRef config, bool enabled);
-// bool YGConfigGetUseWebDefaults(YGConfigRef config);
-// void YGConfigSetCloneNodeFunc(YGConfigRef config, YGCloneNodeFunc callback);
-// void YGConfigSetContext(YGConfigRef config, void *context);
-// void *YGConfigGetContext(YGConfigRef config);
-// float YGRoundValueToPixelGrid(double value, double pointScaleFactor, bool forceCeil, bool forceFloor);
-// void YGTraversePreOrder(YGNodeRef node, std::function<void(YGNodeRef node)> &&f);
-
-// Extension lib defines
 #define LIB_NAME "Yoga"
 #define MODULE_NAME "yoga"
 
-// include the Defold SDK
 #include <dmsdk/sdk.h>
 #include <dmsdk/gui/gui.h>
 #include <dmsdk/script/script.h>
 #include <dmsdk/dlib/hash.h>
 #include <dmsdk/dlib/hashtable.h>
-
 #include "./yoga/Yoga.h"
 
-using namespace dmVMath;
-
+bool g_InvertY = true;
 dmHashTable32<YGNodeRef> g_YGNodes;
 
-static void SetCapacity(int n)
+static YGFlexDirection GetInvertedFlexDirection(YGFlexDirection direction)
+{
+    if (g_InvertY && direction == YGFlexDirectionColumn)
+    {
+        return YGFlexDirectionColumnReverse;
+    }
+    else if (g_InvertY && direction == YGFlexDirectionColumnReverse)
+    {
+        return YGFlexDirectionColumn;
+    }
+
+    return direction;
+}
+
+static YGEdge GetInvertedEdge(YGEdge edge)
+{
+    if (g_InvertY && edge == YGEdgeTop)
+    {
+        return YGEdgeBottom;
+    }
+    else if (g_InvertY && edge == YGEdgeBottom)
+    {
+        return YGEdgeTop;
+    }
+
+    return edge;
+}
+
+static int SetInvertY(lua_State *L)
+{
+    g_InvertY = lua_toboolean(L, 2);
+
+    return 0;
+}
+
+static void SetCapacityInternal(int n)
 {
     g_YGNodes.SetCapacity(n, n);
 }
 
-static int SetCapacityLua(lua_State *L)
+static int SetCapacity(lua_State *L)
 {
-    SetCapacity(luaL_checkinteger(L, 2));
-    
+    SetCapacityInternal(luaL_checkinteger(L, 2));
+
     return 0;
+}
+
+static YGEdge CheckEdge(lua_State *L)
+{
+    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+
+    return GetInvertedEdge(edge);
 }
 
 static YGNodeRef CheckYGNode(lua_State *L)
@@ -123,7 +78,12 @@ static int NewNode(lua_State *L)
     dmGui::HScene scene = dmGui::LuaCheckScene(L);
     dmGui::HNode node = dmGui::LuaCheckNode(L, 1);
     YGNodeRef ygNode = YGNodeNew();
+    if (g_InvertY)
+    {
+        YGNodeStyleSetFlexDirection(ygNode, YGFlexDirectionColumnReverse);
+    }
     g_YGNodes.Put(node, ygNode);
+
     return 0;
 }
 
@@ -221,7 +181,7 @@ static int SetPositionType(lua_State *L)
 static int GetPosition(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     YGValue value = YGNodeStyleGetPosition(node, edge);
     lua_pushnumber(L, value.value);
 
@@ -231,7 +191,7 @@ static int GetPosition(lua_State *L)
 static int SetPosition(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPosition(node, edge, value);
 
@@ -241,7 +201,7 @@ static int SetPosition(lua_State *L)
 static int SetPositionPercent(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPositionPercent(node, edge, value);
 
@@ -259,7 +219,8 @@ static int GetFlexDirection(lua_State *L)
 static int SetFlexDirection(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGNodeStyleSetFlexDirection(node, static_cast<YGFlexDirection>(luaL_checkinteger(L, 2)));
+    YGFlexDirection direction = GetInvertedFlexDirection(static_cast<YGFlexDirection>(luaL_checkinteger(L, 2)));
+    YGNodeStyleSetFlexDirection(node, direction);
 
     return 0;
 }
@@ -579,7 +540,7 @@ static int SetWidthHeight(lua_State *L)
 static int GetBorder(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     lua_pushnumber(L, YGNodeStyleGetBorder(node, edge));
 
     return 1;
@@ -588,7 +549,7 @@ static int GetBorder(lua_State *L)
 static int SetBorder(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetBorder(node, edge, value);
 
@@ -598,7 +559,7 @@ static int SetBorder(lua_State *L)
 static int GetPadding(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     YGValue padding = YGNodeStyleGetPadding(node, edge);
     lua_pushnumber(L, padding.value);
 
@@ -608,7 +569,7 @@ static int GetPadding(lua_State *L)
 static int SetPadding(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPadding(node, edge, value);
 
@@ -618,7 +579,7 @@ static int SetPadding(lua_State *L)
 static int SetPaddingPercent(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetPaddingPercent(node, edge, value);
 
@@ -628,7 +589,7 @@ static int SetPaddingPercent(lua_State *L)
 static int GetMargin(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     YGValue margin = YGNodeStyleGetMargin(node, edge);
     lua_pushnumber(L, margin.value);
 
@@ -638,8 +599,10 @@ static int GetMargin(lua_State *L)
 static int SetMargin(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
+    // YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
     float value = luaL_checknumber(L, 3);
+    printf("setting margin: %d", edge);
     YGNodeStyleSetMargin(node, edge, value);
 
     return 0;
@@ -648,7 +611,7 @@ static int SetMargin(lua_State *L)
 static int SetMarginPercent(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     float value = luaL_checknumber(L, 3);
     YGNodeStyleSetMarginPercent(node, edge, value);
 
@@ -735,7 +698,7 @@ static int GetLayoutHeight(lua_State *L)
 static int GetLayoutBorder(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     lua_pushnumber(L, YGNodeLayoutGetBorder(node, edge));
 
     return 1;
@@ -744,7 +707,7 @@ static int GetLayoutBorder(lua_State *L)
 static int GetLayoutMargin(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     lua_pushnumber(L, YGNodeLayoutGetMargin(node, edge));
 
     return 1;
@@ -753,7 +716,7 @@ static int GetLayoutMargin(lua_State *L)
 static int GetLayoutPadding(lua_State *L)
 {
     YGNodeRef node = CheckYGNode(L);
-    YGEdge edge = static_cast<YGEdge>(luaL_checkinteger(L, 2));
+    YGEdge edge = CheckEdge(L);
     lua_pushnumber(L, YGNodeLayoutGetPadding(node, edge));
 
     return 1;
@@ -784,22 +747,77 @@ static int GetLayout(lua_State *L)
     return 1;
 }
 
-static int DeleteGuiNode(lua_State *L)
+static void UpdateNodeInternal(dmGui::HScene scene, dmGui::HNode dmNode, YGNodeRef ygNode)
+{
+    float width = YGNodeLayoutGetWidth(ygNode);
+    float height = YGNodeLayoutGetHeight(ygNode);
+    float x = YGNodeLayoutGetLeft(ygNode) + width / 2;
+    float y = YGNodeLayoutGetTop(ygNode) + height / 2;
+
+    YGNodeRef parent = YGNodeGetParent(ygNode);
+    if (parent != NULL)
+    {
+        x -= YGNodeLayoutGetWidth(parent) / 2;
+        y -= YGNodeLayoutGetHeight(parent) / 2;
+    }
+
+    SetNodeProperty(scene, dmNode, dmGui::PROPERTY_SIZE, dmVMath::Vector4(width, height, 0, 0));
+    SetNodeProperty(scene, dmNode, dmGui::PROPERTY_POSITION, dmVMath::Vector4(x, y, 0, 0));
+
+    // update all children nodes
+    dmGui::HNode child = GetFirstChildNode(scene, dmNode);
+    while (child != dmGui::INVALID_HANDLE)
+    {
+        YGNodeRef *ygChild = g_YGNodes.Get(child);
+        if (ygChild != NULL)
+        {
+            UpdateNodeInternal(scene, child, *ygChild);
+        }
+        child = GetNextNode(scene, child);
+    }
+}
+
+static int UpdateNode(lua_State *L)
 {
     dmGui::HScene scene = dmGui::LuaCheckScene(L);
     dmGui::HNode node = dmGui::LuaCheckNode(L, 1);
     YGNodeRef *ygNode = g_YGNodes.Get(node);
-    if (ygNode != NULL)
-    {
-        YGNodeFree(*ygNode);
-        g_YGNodes.Erase(node);
-    }
-    dmGui::DeleteNode(scene, node);
+
+    assert(ygNode != NULL);
+
+    UpdateNodeInternal(scene, node, *ygNode);
 
     return 0;
 }
 
-static int SetGuiParent(lua_State *L)
+static void EraseLookups(dmGui::HScene scene, dmGui::HNode node)
+{
+    dmGui::HNode child = GetFirstChildNode(scene, node);
+    while (child != dmGui::INVALID_HANDLE)
+    {
+        g_YGNodes.Erase(child);
+        EraseLookups(scene, child);
+        child = GetNextNode(scene, child);
+    }
+}
+
+static int DeleteNode(lua_State *L)
+{
+    dmGui::HScene scene = dmGui::LuaCheckScene(L);
+    dmGui::HNode node = dmGui::LuaCheckNode(L, 1);
+    YGNodeRef *ygNode = g_YGNodes.Get(node);
+    EraseLookups(scene, node);
+    if (ygNode != NULL)
+    {
+        g_YGNodes.Erase(node);
+        YGNodeFreeRecursive(*ygNode);
+    }
+    DeleteNode(scene, node);
+
+    return 0;
+}
+
+static int SetParent(lua_State *L)
 {
     dmGui::HScene scene = dmGui::LuaCheckScene(L);
     dmGui::HNode node = dmGui::LuaCheckNode(L, 1);
@@ -822,48 +840,72 @@ static int SetGuiParent(lua_State *L)
     return 0;
 }
 
-static void Update(dmGui::HScene scene, dmGui::HNode dmNode, YGNodeRef ygNode)
-{
-    float width = YGNodeLayoutGetWidth(ygNode);
-    float height = YGNodeLayoutGetHeight(ygNode);
-    float x = YGNodeLayoutGetLeft(ygNode) + width / 2;
-    float y = YGNodeLayoutGetTop(ygNode) + height / 2;
-
-    YGNodeRef parent = YGNodeGetParent(ygNode);
-    if (parent != NULL)
-    {
-        x -= YGNodeLayoutGetWidth(parent) / 2;
-        y -= YGNodeLayoutGetHeight(parent) / 2;
-    }
-
-    dmGui::SetNodeProperty(scene, dmNode, dmGui::PROPERTY_SIZE, Vector4(width, height, 0, 0));
-    dmGui::SetNodeProperty(scene, dmNode, dmGui::PROPERTY_POSITION, Vector4(x, y, 0, 0));
-
-    // update all children nodes
-    dmGui::HNode child = dmGui::GetFirstChildNode(scene, dmNode);
-    while (child != dmGui::INVALID_HANDLE)
-    {
-        YGNodeRef *ygChild = g_YGNodes.Get(child);
-        if (ygChild != NULL)
-        {
-            Update(scene, child, *ygChild);
-        }
-        child = GetNextNode(scene, child);
-    }
-}
-
-static int UpdateLua(lua_State *L)
-{
-    dmGui::HScene scene = dmGui::LuaCheckScene(L);
-    dmGui::HNode node = dmGui::LuaCheckNode(L, 1);
-    YGNodeRef *ygNode = g_YGNodes.Get(node);
-
-    assert(ygNode != NULL);
-
-    Update(scene, node, *ygNode);
-
-    return 0;
-}
+// YGNodeRef YGNodeNewWithConfig(YGConfigRef config);
+// YGNodeRef YGNodeClone(YGNodeRef node);
+// void YGNodeFreeRecursiveWithCleanupFunc(YGNodeRef node, YGNodeCleanupFunc cleanup);
+// void YGNodeFreeRecursive(YGNodeRef node);
+// void YGNodeInsertChild(YGNodeRef node, YGNodeRef child, uint32_t index);
+// void YGNodeSwapChild(YGNodeRef node, YGNodeRef child, uint32_t index);
+// void YGNodeRemoveChild(YGNodeRef node, YGNodeRef child);
+// void YGNodeRemoveAllChildren(YGNodeRef node);
+// YGNodeRef YGNodeGetChild(YGNodeRef node, uint32_t index);
+// YGNodeRef YGNodeGetOwner(YGNodeRef node);
+// YGNodeRef YGNodeGetParent(YGNodeRef node);
+// uint32_t YGNodeGetChildCount(YGNodeRef node);
+// void YGNodeSetChildren(YGNodeRef owner, const YGNodeRef children[], uint32_t count);
+// void YGNodeSetChildren(YGNodeRef owner, const std::vector<YGNodeRef> &children);
+// void YGNodeSetIsReferenceBaseline(YGNodeRef node, bool isReferenceBaseline);
+// bool YGNodeIsReferenceBaseline(YGNodeRef node);
+// void YGNodeMarkDirty(YGNodeRef node);
+// void YGNodeMarkDirtyAndPropagateToDescendants(YGNodeRef node);
+// void YGNodePrint(YGNodeRef node, YGPrintOptions options);
+// bool YGFloatIsUndefined(float value);
+// bool YGNodeCanUseCachedMeasurement(YGMeasureMode widthMode, float width, YGMeasureMode heightMode, float height, YGMeasureMode lastWidthMode, float lastWidth, YGMeasureMode lastHeightMode, float lastHeight, float lastComputedWidth, float lastComputedHeight, float marginRow, float marginColumn, YGConfigRef config);
+// void YGNodeCopyStyle(YGNodeRef dstNode, YGNodeRef srcNode);
+// void *YGNodeGetContext(YGNodeRef node);
+// void YGNodeSetContext(YGNodeRef node, void *context);
+// void YGConfigSetPrintTreeFlag(YGConfigRef config, bool enabled);
+// bool YGNodeHasMeasureFunc(YGNodeRef node);
+// void YGNodeSetMeasureFunc(YGNodeRef node, YGMeasureFunc measureFunc);
+// bool YGNodeHasBaselineFunc(YGNodeRef node);
+// void YGNodeSetBaselineFunc(YGNodeRef node, YGBaselineFunc baselineFunc);
+// YGDirtiedFunc YGNodeGetDirtiedFunc(YGNodeRef node);
+// void YGNodeSetDirtiedFunc(YGNodeRef node, YGDirtiedFunc dirtiedFunc);
+// void YGNodeSetPrintFunc(YGNodeRef node, YGPrintFunc printFunc);
+// bool YGNodeGetHasNewLayout(YGNodeRef node);
+// void YGNodeSetHasNewLayout(YGNodeRef node, bool hasNewLayout);
+// YGNodeType YGNodeGetNodeType(YGNodeRef node);
+// void YGNodeSetNodeType(YGNodeRef node, YGNodeType nodeType);
+// bool YGNodeIsDirty(YGNodeRef node);
+// void YGNodeStyleSetFlexBasisAuto(YGNodeRef node);
+// void YGNodeStyleSetMarginAuto(YGNodeRef node, YGEdge edge);
+// void YGNodeStyleSetGap(YGNodeRef node, YGGutter gutter, float gapLength);
+// float YGNodeStyleGetGap(YGNodeConstRef node, YGGutter gutter);
+// void YGNodeStyleSetWidthAuto(YGNodeRef node);
+// void YGNodeStyleSetHeightAuto(YGNodeRef node);
+// YGDirection YGNodeLayoutGetDirection(YGNodeRef node);
+// bool YGNodeLayoutGetHadOverflow(YGNodeRef node);
+// void YGAssert(bool condition, const char *message);
+// void YGAssertWithNode(YGNodeRef node, bool condition, const char *message);
+// void YGAssertWithConfig(YGConfigRef config, bool condition, const char *message);
+// YGConfigRef YGConfigNew(void);
+// YGConfigRef YGConfigGetDefault(void);
+// int32_t YGConfigGetInstanceCount(void);
+// void YGConfigSetLogger(YGConfigRef config, YGLogger logger);
+// void YGConfigSetPointScaleFactor(YGConfigRef config, float pixelsInPoint);
+// bool YGConfigGetUseLegacyStretchBehaviour(YGConfigRef config);
+// void YGConfigSetUseLegacyStretchBehaviour(YGConfigRef config, bool useLegacyStretchBehaviour);
+// void YGConfigFree(YGConfigRef config);
+// void YGConfigCopy(YGConfigRef dest, YGConfigRef src);
+// void YGConfigSetExperimentalFeatureEnabled(YGConfigRef config, YGExperimentalFeature feature, bool enabled);
+// bool YGConfigIsExperimentalFeatureEnabled(YGConfigRef config, YGExperimentalFeature feature);
+// void YGConfigSetUseWebDefaults(YGConfigRef config, bool enabled);
+// bool YGConfigGetUseWebDefaults(YGConfigRef config);
+// void YGConfigSetCloneNodeFunc(YGConfigRef config, YGCloneNodeFunc callback);
+// void YGConfigSetContext(YGConfigRef config, void *context);
+// void *YGConfigGetContext(YGConfigRef config);
+// float YGRoundValueToPixelGrid(double value, double pointScaleFactor, bool forceCeil, bool forceFloor);
+// void YGTraversePreOrder(YGNodeRef node, std::function<void(YGNodeRef node)> &&f);
 
 static int SetStyle(lua_State *L)
 {
@@ -984,7 +1026,7 @@ static int SetStyle(lua_State *L)
     //     if ((v4 = dmScript::ToVector4(L, 2)))
     //     {
     //         Scene* scene = GuiScriptInstance_Check(L);
-    //         dmGui::SetNodeProperty(scene, hnode, dmGui::PROPERTY_SLICE9, *v4);
+    //         SetNodeProperty(scene, hnode, PROPERTY_SLICE9, *v4);
     //     }
     //     else
     //     {
@@ -1003,54 +1045,62 @@ static int SetStyle(lua_State *L)
 static const luaL_reg Module_methods[] =
     {
         // {"set_style", SetStyle},
-        
-        {"set_capacity", SetCapacityLua},
-        {"update", UpdateLua},
-        {"set_gui_parent", SetGuiParent},
-        {"delete_gui_node", DeleteGuiNode},
-        {"set_width_height", SetWidthHeight},
+
+        {"set_capacity", SetCapacity},
+        {"set_invert_y", SetInvertY},
 
         {"new_node", NewNode},
         {"free_node", FreeNode},
+        {"update_node", UpdateNode},
+        {"delete_node", DeleteNode},
         {"reset_node", ResetNode},
-        {"calculate_layout", CalculateLayout},
+        {"set_parent", SetParent},
 
         {"get_overflow", GetOverflow},
         {"set_overflow", SetOverflow},
+
         {"get_direction", GetDirection},
         {"set_direction", SetDirection},
+
         {"get_flex_direction", GetFlexDirection},
         {"set_flex_direction", SetFlexDirection},
 
         {"get_align_items", GetAlignItems},
         {"set_align_items", SetAlignItems},
+
         {"get_align_content", GetAlignContent},
         {"set_align_content", SetAlignContent},
+
         {"get_justify_content", GetJustifyContent},
         {"set_justify_content", SetJustifyContent},
 
         {"get_grow", GetGrow},
         {"set_grow", SetGrow},
+
         {"get_shrink", GetShrink},
         {"set_shrink", SetShrink},
+
         {"get_basis", GetBasis},
         {"set_basis", SetBasis},
         {"set_basis_percent", SetBasisPercent},
 
         {"get_flex_position", GetPositionType},
         {"set_flex_position", SetPositionType},
+
         {"get_position", GetPosition},
         {"set_position", SetPosition},
         {"set_position_percent", SetPositionPercent},
 
         {"get_width", GetWidth},
         {"set_width", SetWidth},
+        {"set_width_percent", SetWidthPercent},
+
         {"get_min_width", GetMinWidth},
         {"set_min_width", SetMinWidth},
+        {"set_min_width_percent", SetMinWidthPercent},
+
         {"get_max_width", GetMaxWidth},
         {"set_max_width", SetMaxWidth},
-        {"set_width_percent", SetWidthPercent},
-        {"set_min_width_percent", SetMinWidthPercent},
         {"set_max_width_percent", SetMaxWidthPercent},
 
         {"get_height", GetHeight},
@@ -1064,6 +1114,8 @@ static const luaL_reg Module_methods[] =
         {"get_max_height", GetMaxHeight},
         {"set_max_height", SetMaxHeight},
         {"set_max_height_percent", SetMaxHeightPercent},
+
+        {"set_width_height", SetWidthHeight},
 
         {"get_aspect_ratio", GetAspectRatio},
         {"set_aspect_ratio", SetAspectRatio},
@@ -1079,6 +1131,7 @@ static const luaL_reg Module_methods[] =
         {"set_padding", SetPadding},
         {"set_padding_percent", SetPaddingPercent},
 
+        {"calculate_layout", CalculateLayout},
         {"get_layout", GetLayout},
         {"get_layout_left", GetLayoutLeft},
         {"get_layout_top", GetLayoutTop},
@@ -1089,7 +1142,7 @@ static const luaL_reg Module_methods[] =
         {"get_layout_border", GetLayoutBorder},
         {"get_layout_margin", GetLayoutMargin},
         {"get_layout_padding", GetLayoutPadding},
-        
+
         {0, 0}};
 
 static void LuaInit(lua_State *L)
@@ -1162,7 +1215,7 @@ dmExtension::Result AppInitializeYoga(dmExtension::AppParams *params)
 
 dmExtension::Result InitializeYoga(dmExtension::Params *params)
 {
-    SetCapacity(1024);
+    SetCapacityInternal(1024);
     LuaInit(params->m_L);
     printf("Registered %s Extension\n", MODULE_NAME);
     return dmExtension::RESULT_OK;

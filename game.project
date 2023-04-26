@@ -14,3 +14,6 @@ title = Yoga
 [library]
 include_dirs = yoga
 
+[android]
+debuggable = 1
+
