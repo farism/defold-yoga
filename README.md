@@ -26,7 +26,7 @@ Yoga is a high performance C++ library which implements the Flexbox specificatio
 
 Yoga's layout algorithm assumes you are working in a traditional document coordinate system, with the `(0,0)` being at the top left corner.
 
-However, Defold uses the bottom left corner as `(0,0)`. To account for this the Defold Yoga extension, by default, will apply styles in a way that "inverts" the y-coordinate.
+However, Defold uses the bottom left corner as `(0,0)`. To account for this the Defold Yoga extension will apply styles in a way that "inverts" the y-coordinate.
 
 What this essentially means is that setting `FLEX_DIRECTION_COLUMN` will actually set `FLEX_DIRECTION_COLUMN_REVERSE`, and vice-versa.
 
@@ -36,7 +36,7 @@ To opt-out of this behavior you can disable it by calling `yoga.set_invert_y(fal
 
 ## Example
 
-The [example in this repo](https://github.com/farism/defold-yoga/tree/main/example) demonstrates a simple three row layout with a fixed size header and footer, and a body that scales to fill the area.
+The [example in this repo](https://github.com/farism/defold-yoga/blob/main/example/gui.gui_script#L2-L33) demonstrates a simple three row layout with a fixed size header and footer, and a body that scales to fill the area.
 
 View the [live demo here](https://farism.github.io/defold-yoga)
 

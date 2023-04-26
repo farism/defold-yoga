@@ -2,32 +2,64 @@
   type: table
   desc: Yoga layout engine
   members:
-  - name: update
+  - name: new_node
     type: function
-    desc: 
+    parameters:
+    - name: node
+      type: node
+
+  - name: delete_node
+    type: function
+    parameters:
+    - name: node
+      type: node
+
+  - name: free_node
+    type: function
+    parameters:
+    - name: node
+      type: node
+
+  - name: delete_node
+    type: function
+    parameters:
+    - name: node
+      type: node
+
+  - name: reset_node
+    type: function
     parameters:
     - name: node
       type: node
 
   - name: set_parent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
     - name: parent
       type: node
 
-  - name: delete_node
+  - name: get_child_count
     type: function
-    desc: 
+    parameters:
+    - name: node
+      type: node
+  
+  - name: update
+    type: function
+    parameters:
+    - name: node
+      type: node
+
+  - name: calculate_layout
+    type: function
     parameters:
     - name: node
       type: node
 
   - name: set_width_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -36,51 +68,14 @@
     - name: height
       type: number
 
-  - name: new_node
-    type: function
-    desc: 
-    parameters:
-    - name: node
-      type: node
-
-  - name: delete_node
-    type: function
-    desc: 
-    parameters:
-    - name: node
-      type: node
-
-  - name: free_node
-    type: function
-    desc: 
-    parameters:
-    - name: node
-      type: node
-
-  - name: reset_node
-    type: function
-    desc: 
-    parameters:
-    - name: node
-      type: node
-
-  - name: calculate_layout
-    type: function
-    desc: 
-    parameters:
-    - name: node
-      type: node
-
   - name: get_overflow
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_overflow
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -89,14 +84,12 @@
 
   - name: get_direction
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_direction
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -105,14 +98,12 @@
 
   - name: get_flex_direction
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_flex_direction
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -121,14 +112,12 @@
 
   - name: get_align_items
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_align_items
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -137,14 +126,12 @@
 
   - name: get_align_content
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_align_content
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -153,14 +140,12 @@
 
   - name: get_justify_content
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_justify_content
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -169,14 +154,12 @@
 
   - name: get_grow
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_grow
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -185,14 +168,12 @@
 
   - name: get_shrink
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_shrink
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -201,14 +182,12 @@
 
   - name: get_basis
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_basis
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -217,7 +196,6 @@
 
   - name: set_basis_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -226,14 +204,12 @@
 
   - name: get_flex_position
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_flex_position
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -242,14 +218,12 @@
 
   - name: get_position
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_position
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -258,7 +232,6 @@
 
   - name: set_position_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -269,14 +242,12 @@
 
   - name: get_width
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_width
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -285,14 +256,12 @@
 
   - name: get_min_width
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_min_width
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -301,14 +270,12 @@
 
   - name: get_max_width
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_max_width
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -317,7 +284,6 @@
 
   - name: set_width_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -326,7 +292,6 @@
 
   - name: set_min_width_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -335,7 +300,6 @@
 
   - name: set_max_width_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -344,14 +308,12 @@
 
   - name: get_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -360,7 +322,6 @@
 
   - name: set_height_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -369,14 +330,12 @@
 
   - name: get_min_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_min_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -385,7 +344,6 @@
 
   - name: set_min_height_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -394,14 +352,12 @@
 
   - name: get_max_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_max_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -410,7 +366,6 @@
 
   - name: set_max_height_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -419,14 +374,12 @@
 
   - name: get_aspect_ratio
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_aspect_ratio
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -435,14 +388,12 @@
 
   - name: get_border
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_border
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -453,14 +404,12 @@
 
   - name: get_margin
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_margin
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -471,7 +420,6 @@
 
   - name: set_margin_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -482,14 +430,12 @@
 
   - name: get_padding
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: set_padding
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -500,7 +446,6 @@
 
   - name: set_padding_percent
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
@@ -511,70 +456,60 @@
 
   - name: get_layout
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_left
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_top
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_right
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_bottom
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_width
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_height
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_border
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_margin
     type: function
-    desc: 
     parameters:
     - name: node
       type: node
 
   - name: get_layout_padding
     type: function
-    desc: 
     parameters:
     - name: node
       type: node

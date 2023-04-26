@@ -6,6 +6,7 @@ declare namespace yoga {
   export function delete_node(node: node): any
   export function reset_node(node: node): any
   export function set_parent(child: node, parent: node, keep_scene_transform: boolean): any
+  export function get_child_count(node: node): number
 
   export function get_direction(node: node): number
   export function set_direction(node: node, direction: any): void
